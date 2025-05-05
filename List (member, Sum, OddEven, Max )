@@ -51,22 +51,27 @@ oddlength(List) so that they are true if their argument is a list of even or odd
 Respectively.
 
 
-evenlength([]). 
-oddlength([_]).  
+% Base cases
+evenlength([]) :- !.
+oddlength([_]) :- !.
 
+% Recursive cases with cut
+evenlength([_,_|T]) :-
+    evenlength(T), !.
 
-evenlength([_, |T]) :- oddlength(T). 
+oddlength([_,_|T]) :-
+    oddlength(T), !.
 
-
-oddlength([_, |T]) :- evenlength(T). 
-
-
-start :-
-    write('Enter list (as a Prolog list, e.g., [1,2,3]): '),
+% Main predicate to check the list length
+run :-
+    write('Enter a list (e.g., [1,2,3]): '),
     read(List),
-    (   evenlength(List) -> write('The list has an even length.')
-    ;   oddlength(List) -> write('The list has an odd length.')
-    ), nl.
+    (   evenlength(List) ->
+        write('The list has even length.'), nl, !
+    ;   oddlength(List) ->
+        write('The list has odd length.'), nl, !
+    ).
+
 
 
 
